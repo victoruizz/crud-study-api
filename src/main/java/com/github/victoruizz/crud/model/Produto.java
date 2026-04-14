@@ -2,7 +2,14 @@ package com.github.victoruizz.crud.model;
 
 import java.math.BigDecimal;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "produtin")
 public class Produto {
+    @Id
     private Long id;
     private String nome;
     private BigDecimal valor;
@@ -11,6 +18,10 @@ public class Produto {
         this.id = id;
         this.nome = nome;
         this.valor = valor;
+    }
+
+    public Produto() {
+
     }
 
     public Long getId() {

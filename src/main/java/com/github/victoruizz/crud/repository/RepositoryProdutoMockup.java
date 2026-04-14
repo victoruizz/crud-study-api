@@ -5,16 +5,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.victoruizz.crud.model.Produto;
 
 @Service
 public class RepositoryProdutoMockup {
+
+    @Autowired
+    private final ProdutoRepository produtoRepository;
+
+
     private List<Produto> produtos = new ArrayList<>();
     private long ID = 1L;
     
-    public RepositoryProdutoMockup() {        
+    public RepositoryProdutoMockup(ProdutoRepository produtoRepository) {
+        this.produtoRepository = produtoRepository;
         produtos.add(new Produto(ID++, "Maça", BigDecimal.valueOf(10.50)));  
         produtos.add(new Produto(ID++, "Uva", BigDecimal.valueOf(15.23)));            
     }
@@ -38,7 +45,8 @@ public class RepositoryProdutoMockup {
         produto.setId(ID++);        
         // salvar no BD
         produtos.add(produto);
-        // retornar o produto novo        
+        // retornar o produto novo
+        produtoRepository.save(produto);
         return produto;
     }
 

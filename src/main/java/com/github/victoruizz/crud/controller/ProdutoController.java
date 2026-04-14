@@ -1,7 +1,9 @@
 package com.github.victoruizz.crud.controller;
 
 import java.util.List;
+import java.util.Optional;
 
+import com.github.victoruizz.crud.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +26,11 @@ public class ProdutoController {
     @Autowired
     private RepositoryProdutoMockup mockup;
 
+    @Autowired
+    private ProdutoRepository  repository;
     @PostMapping
     public ResponseEntity<Produto> create(@RequestBody Produto produto) {        
-        return ResponseEntity.status(HttpStatus.CREATED).body(mockup.create(produto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(produto));
     }
 
     @GetMapping("/{id}")    
@@ -42,22 +46,31 @@ public class ProdutoController {
         return ResponseEntity.ok(mockup.findAll());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id, 
-                                @RequestBody Produto produto) {
-        if (mockup.update(id, produto)) {
-            return ResponseEntity.ok("Produto atualizado");
-        } else {
-            return ResponseEntity.notFound().build();
-        }        
-    }
+    // @PutMapping("/{id}")
+    // public ResponseEntity<String> update(@PathVariable Long id,
+    //                             @RequestBody Produto produto) {
+    //
+    //     Optional<Produto> optProduto = repository.findById(id);
+    //     if(optProduto.isPresent()) {
+    //         produto.setId(id);
+    //         repository.save(produto);
+    //
+    //     }
+    //     if (mockup.update(id, produto)) {
+    //         return ResponseEntity.ok("Produto atualizado");
+    //     } else {
+    //         return ResponseEntity.notFound().build();
+    //     }
+    // }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) { 
-        if (mockup.deleteById(id)) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }        
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
+        //if (mockup.deleteById(id)) {
+          //  return ResponseEntity.noContent().build();
+        //} else {
+          //  return ResponseEntity.notFound().build();
+        //}
     }
 }
